@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Income & Expense Tracker</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box}body{margin:0;overflow-x:hidden;background:#f3f4f6;color:#111827;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}.app{max-width:600px;margin:auto;min-height:100vh;background:#f3f4f6}.topbar{background:#111827;color:#fff;padding:18px 18px 20px;display:flex;align-items:center;justify-content:space-between}.eyebrow{font-size:10px;letter-spacing:1.5px;opacity:.65}.topbar h1{font-size:21px;margin:4px 0 0}.icon-btn{border:0;background:#374151;color:white;width:42px;height:42px;border-radius:12px;font-size:22px}main{padding:14px 14px 110px;overflow-x:hidden}.screen{display:none}.screen.active{display:block}.card,.quick-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 2px 12px #00000008}.entry-card{padding:18px}.type-switch{display:flex;background:#f3f4f6;border-radius:12px;padding:4px;margin-bottom:18px}.type-btn{flex:1;border:0;padding:12px;border-radius:9px;background:transparent;font-weight:700;font-size:15px}.type-btn.active.income{background:#dcfce7;color:#15803d}.type-btn.active.expense{background:#fee2e2;color:#dc2626}label{display:block;font-size:12px;color:#6b7280;font-weight:600;margin:10px 0 6px}input{width:100%;border:1px solid #d1d5db;border-radius:11px;padding:13px;font-size:16px;outline:none;background:#fff}input:focus{border-color:#6b7280}.amount-wrap{display:flex;align-items:center;border:1px solid #d1d5db;border-radius:11px;padding-left:13px}.amount-wrap span{font-weight:700;color:#6b7280}.amount-wrap input{border:0}.save-btn{width:100%;border:0;border-radius:12px;background:#111827;color:#fff;padding:14px;font-size:16px;font-weight:700;margin-top:16px}.save-msg{text-align:center;height:18px;font-size:12px;color:#16a34a;margin-top:7px}.mini-grid,.summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.mini-grid div{background:#f9fafb;border-radius:11px;padding:11px}.mini-grid span,.summary span{display:block;color:#6b7280;font-size:11px}.mini-grid strong{font-size:14px;display:block;margin-top:4px}.section-title{font-size:16px;font-weight:800}.summary{padding:14px;border-radius:14px;background:#fff;box-shadow:0 2px 12px #00000008}.summary strong{display:block;font-size:17px;margin-top:5px}.income-box{border-left:4px solid #22c55e}.expense-box{border-left:4px solid #ef4444}.balance-box{border-left:4px solid #6366f1}.summary-grid{margin-bottom:14px}.expense-percent-box{border-left:4px solid #f59e0b}.row-between{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.text-danger{border:0;background:none;color:#dc2626;font-size:12px;font-weight:700}.history-item{display:flex;justify-content:space-between;gap:8px;padding:13px 0;border-bottom:1px solid #eee}.history-item:last-child{border-bottom:0}.particular{font-weight:700;font-size:14px;overflow-wrap:anywhere}.date{font-size:11px;color:#9ca3af;margin-top:3px}.income-text{color:#16a34a}.expense-text{color:#dc2626}.amount{font-weight:800;white-space:nowrap}.delete-btn{border:0;background:none;color:#9ca3af;margin-left:7px}.empty{text-align:center;color:#9ca3af;padding:25px 5px;font-size:13px}.date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.secondary-btn{width:100%;margin-top:13px;border:0;background:#e5e7eb;border-radius:11px;padding:12px;font-weight:700}.link-btn{display:block;border:0;background:none;margin:8px auto 0;color:#4f46e5}.report-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.report-line{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee}.report-line:last-child{border-bottom:0}.report-name{font-weight:700;min-width:0;overflow-wrap:anywhere}.report-values{text-align:right;font-size:15px;font-weight:600;min-width:0;overflow-wrap:anywhere}.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(600px,100%);height:72px;background:#fff;border-top:1px solid #e5e7eb;display:flex;z-index:10}.nav-btn{flex:1;border:0;background:white;color:#9ca3af;font-size:11px}.nav-btn b{display:block;font-size:22px;line-height:24px}.nav-btn.active{color:#111827;font-weight:800}@media(min-width:601px){.bottom-nav{border-radius:18px 18px 0 0}}
+
+.calculator-card{padding:16px;display:none;margin-top:0}.calculator-card.open{display:block}.calculator-toggle{margin-bottom:0;border-radius:11px}.calc-display{text-align:right;font-size:22px;font-weight:700;margin-bottom:10px;background:#f9fafb}.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.calc-grid button{border:0;border-radius:10px;background:#f3f4f6;padding:13px;font-size:17px;font-weight:700}.calc-grid button[data-calc="/"],.calc-grid button[data-calc="*"],.calc-grid button[data-calc="-"],.calc-grid button[data-calc="+"]{background:#e5e7eb}.calc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.calc-actions .secondary-btn,.calc-actions .save-btn{margin-top:9px}
+
+.report-type{font-size:12px;font-weight:700;margin-right:4px}
+.report-amount{font-size:16px;font-weight:800}
+.note-text{font-size:11px;color:#6b7280;margin-top:2px;overflow-wrap:anywhere}
+.edit-btn{border:0;background:none;color:#4f46e5;margin-left:7px;font-size:13px;font-weight:700}
+.history-actions{display:flex;align-items:center;gap:2px}
+.pct-small{font-size:11px;font-weight:600;color:#6b7280;display:block;margin-top:2px}
+@media print{.bottom-nav,.topbar button,#printReportBtn,#filterBtn,#resetFilterBtn,.calculator-toggle,.calculator-card,.link-btn{display:none!important}body{background:#fff}.app{max-width:100%;margin:0;box-shadow:none}.screen{display:block!important}#entry,#dashboard{display:none!important}#report{display:block!important}.date-row{display:flex!important;gap:8px;margin:4px 0 8px;font-size:11px}.date-row label{font-size:10px;margin:0 0 2px}.date-row input{padding:4px 6px;font-size:11px;border-radius:6px}.card{padding:10px;margin-bottom:8px}.section-title{font-size:14px}.summary{padding:8px}.summary strong{font-size:14px}.report-line{padding:6px 0}.report-amount{font-size:13px}}
+textarea{width:100%;border:1px solid #d1d5db;border-radius:11px;padding:13px;font-size:15px;outline:none;background:#fff;resize:vertical;min-height:60px;font-family:inherit}
+textarea:focus{border-color:#6b7280}
+.edit-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.edit-modal.open{display:flex}
+.edit-sheet{background:#fff;width:min(600px,100%);border-radius:18px 18px 0 0;padding:18px 16px 28px;max-height:90vh;overflow-y:auto}
+.edit-sheet .section-title{margin-bottom:8px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">OFFLINE TRACKER</div>
+      <h1>Income & Expense</h1>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button id="backupBtn" class="icon-btn" title="Set up automatic backup">💾</button>
+      <button id="exportBtn" class="icon-btn" title="Export Excel">⇩</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="entry" class="screen active">
+      
+
+<div class="card entry-card">
+        <div class="type-switch">
+          <button id="incomeType" class="type-btn income">Income</button>
+          <button id="expenseType" class="type-btn expense active">Expense</button>
+        </div>
+        <label>Particular</label>
+        <input id="particular" type="text" list="particularList" placeholder="e.g. Salary, Food, Transport" autocomplete="off">
+        <datalist id="particularList"></datalist>
+        <label>Note <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+        <textarea id="note" placeholder="e.g. Lunch with friends, monthly salary..." rows="2"></textarea>
+        <label>Amount</label>
+        <div class="amount-wrap"><span>৳</span><input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></div>
+        <button id="saveBtn" class="save-btn">Save Entry</button>
+        <div id="saveMsg" class="save-msg"></div>
+      <button id="calculatorToggle" class="secondary-btn calculator-toggle">🧮 Calculator</button>
+      <div class="card calculator-card">
+  <div class="section-title">Calculator</div>
+  <input id="calcDisplay" class="calc-display" type="text" inputmode="decimal"
+         placeholder="0" readonly>
+  <div class="calc-grid">
+    <button data-calc="7">7</button><button data-calc="8">8</button><button data-calc="9">9</button><button data-calc="/">÷</button>
+    <button data-calc="4">4</button><button data-calc="5">5</button><button data-calc="6">6</button><button data-calc="*">×</button>
+    <button data-calc="1">1</button><button data-calc="2">2</button><button data-calc="3">3</button><button data-calc="-">−</button>
+    <button data-calc="0">0</button><button data-calc=".">.</button><button id="calcClear">C</button><button data-calc="+">+</button>
+  </div>
+  <div class="calc-actions">
+    <button id="calcEquals" class="secondary-btn">= Calculate</button>
+    <button id="calcToAmount" class="save-btn">Save to Amount</button>
+  </div>
+</div><div id="backupStatus" class="save-msg"></div>
+      </div>
+      
+      <div class="quick-card">
+        <div class="section-title">Today</div>
+        <div class="mini-grid">
+          <div><span>Income</span><strong id="todayIncome">৳0.00</strong></div>
+          <div><span>Expense</span><strong id="todayExpense">৳0.00</strong></div>
+          <div><span>Balance</span><strong id="todayBalance">৳0.00</strong></div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="dashboard" class="screen">
+      <div class="summary-grid">
+        <div class="summary income-box"><span>Total Income</span><strong id="totalIncome">৳0.00</strong></div>
+        <div class="summary expense-box"><span>Total Expense</span><strong id="totalExpense">৳0.00</strong></div>
+        <div class="summary balance-box"><span>Net Balance</span><strong id="netBalance">৳0.00</strong></div>
+        <div class="summary expense-percent-box"><span>Top Expense</span><strong id="expensePercent">See Report</strong></div>
+      </div>
+      <div class="card">
+        <div class="row-between"><div class="section-title">Recent Entries</div><button id="clearAll" class="text-danger">Clear All</button></div>
+        <div id="historyList"></div>
+      </div>
+    </section>
+
+    <section id="report" class="screen">
+      <div class="card">
+        <div class="section-title">Report</div>
+        <div class="date-row">
+          <div><label>From</label><input id="fromDate" type="date"></div>
+          <div><label>To</label><input id="toDate" type="date"></div>
+        </div>
+        <button id="filterBtn" class="secondary-btn">Apply Filter</button>
+        <button id="resetFilterBtn" class="link-btn">Reset</button>
+        <button id="printReportBtn" class="secondary-btn" style="margin-top:8px;background:#111827;color:#fff;">🖨️ Print Report</button>
+      </div>
+      <div class="summary-grid report-summary">
+        <div class="summary income-box"><span>Income</span><strong id="reportIncome">৳0.00</strong></div>
+        <div class="summary expense-box"><span>Expense</span><strong id="reportExpense">৳0.00</strong></div>
+        <div class="summary balance-box"><span>Balance</span><strong id="reportBalance">৳0.00</strong></div>
+      </div>
+      <div class="card">
+        <div class="section-title">Particular-wise Summary</div>
+        <div id="particularReport"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <button data-tab="entry" class="nav-btn active"><b>＋</b><span>Entry</span></button>
+    <button data-tab="dashboard" class="nav-btn"><b>☰</b><span>History</span></button>
+    <button data-tab="report" class="nav-btn"><b>▥</b><span>Report</span></button>
+  </nav>
+</div>
+
+<div id="editModal" class="edit-modal">
+  <div class="edit-sheet">
+    <div class="section-title">Edit Entry</div>
+    <div class="type-switch" style="margin-bottom:12px">
+      <button id="editIncomeType" class="type-btn income">Income</button>
+      <button id="editExpenseType" class="type-btn expense">Expense</button>
+    </div>
+    <label>Particular</label>
+    <input id="editParticular" type="text" list="particularList" autocomplete="off">
+    <label>Note <span style="font-weight:400;color:#9ca3af">(optional)</span></label>
+    <textarea id="editNote" rows="2" placeholder="Optional note..."></textarea>
+    <label>Amount</label>
+    <div class="amount-wrap"><span>৳</span><input id="editAmount" type="number" inputmode="decimal" min="0" step="0.01"></div>
+    <label>Date</label>
+    <input id="editDate" type="date">
+    <button id="updateBtn" class="save-btn">Update Entry</button>
+    <button id="cancelEditBtn" class="secondary-btn">Cancel</button>
+  </div>
+</div>
+<script>
+const KEY="income_expense_tracker_v1";let entries=[];try{entries=JSON.parse(localStorage.getItem(KEY)||"[]");if(!Array.isArray(entries))entries=[];}catch(e){entries=[];}let type="expense";let editId=null;let editType="expense";
+const $=id=>document.getElementById(id);
+const money=n=>"৳"+Number(n||0).toLocaleString("en-BD",{minimumFractionDigits:2,maximumFractionDigits:2});
+function save(){try{localStorage.setItem(KEY,JSON.stringify(entries));return true;}catch(e){return false;}}
+function totals(list){return list.reduce((a,e)=>{a[e.type]+=Number(e.amount);return a},{income:0,expense:0});}
+function todayStr(){return new Date().toISOString().slice(0,10)}
+function render(){
+ const t=todayStr(), today=entries.filter(e=>e.date===t), tt=totals(today), all=totals(entries);
+ $("todayIncome").textContent=money(tt.income);$("todayExpense").textContent=money(tt.expense);$("todayBalance").textContent=money(tt.income-tt.expense);
+ $("totalIncome").textContent=money(all.income);$("totalExpense").textContent=money(all.expense);$("netBalance").textContent=money(all.income-all.expense);
+let dashMap={};entries.filter(e=>e.type==="expense").forEach(e=>{let k=e.particular.trim()||"Other";dashMap[k]=(dashMap[k]||0)+Number(e.amount)});
+let topExpense=Object.entries(dashMap).sort((a,b)=>b[1]-a[1])[0];
+if(topExpense&&all.expense){
+  const pct=((topExpense[1]/all.expense)*100).toFixed(2);
+  $("expensePercent").innerHTML=`${esc(topExpense[0])}<span class="pct-small">${pct}%</span>`;
+}else{
+  $("expensePercent").textContent="See Report";
+}
+ updateParticularSuggestions();
+ renderHistory();renderReport();
+}
+function updateParticularSuggestions(){
+  const dl=$("particularList"); if(!dl) return;
+  const set=new Set();
+  entries.forEach(e=>{ const p=(e.particular||"").trim(); if(p) set.add(p); });
+  dl.innerHTML=[...set].sort((a,b)=>a.localeCompare(b)).map(p=>`<option value="${esc(p)}">`).join("");
+}
+
+function renderHistory(){
+ const box=$("historyList");box.innerHTML="";
+ if(!entries.length){box.innerHTML='<div class="empty">No entries yet.</div>';return}
+ [...entries].sort((a,b)=>b.createdAt-a.createdAt).forEach(e=>{
+  const div=document.createElement("div");div.className="history-item";
+  const noteHtml=e.note?`<div class="note-text">${esc(e.note)}</div>`:"";
+  div.innerHTML=`<div><div class="particular">${esc(e.particular)}</div>${noteHtml}<div class="date">${e.date} • ${e.type}</div></div><div class="${e.type}-text amount">${e.type==="income"?"+":"-"}${money(e.amount)} <span class="history-actions"><button class="edit-btn" data-id="${e.id}">✎</button><button class="delete-btn" data-id="${e.id}">✕</button></span></div>`;
+  box.appendChild(div);
+ });
+ box.querySelectorAll(".delete-btn").forEach(b=>b.onclick=()=>{if(confirm("Delete this entry?")){entries=entries.filter(e=>e.id!==b.dataset.id);save();render()}});
+ box.querySelectorAll(".edit-btn").forEach(b=>b.onclick=()=>openEdit(b.dataset.id));
+}
+function renderReport(){
+ let list=[...entries],from=$("fromDate").value,to=$("toDate").value;
+ if(from)list=list.filter(e=>e.date>=from);if(to)list=list.filter(e=>e.date<=to);
+ let t=totals(list);$("reportIncome").textContent=money(t.income);$("reportExpense").textContent=money(t.expense);$("reportBalance").textContent=money(t.income-t.expense);
+ let map={};list.forEach(e=>{let k=e.particular.trim()||"Other";if(!map[k])map[k]={income:0,expense:0};map[k][e.type]+=Number(e.amount)});
+ let box=$("particularReport");box.innerHTML="";
+ let rows=Object.entries(map).sort((a,b)=>(b[1].income+b[1].expense)-(a[1].income+a[1].expense));
+ if(!rows.length){box.innerHTML='<div class="empty">No data for this period.</div>';return}
+ rows.forEach(([name,v])=>{
+  let expensePct=t.expense && v.expense>0 ? ((v.expense/t.expense)*100) : 0;
+  let d=document.createElement("div");
+  d.className="report-line";
+  let details="";
+  if(v.income>0){
+    details+=`<div><span class="report-type income-text">Income</span> <span class="report-amount">${money(v.income)}</span></div>`;
+  }
+  if(v.expense>0){
+    details+=`<div><span class="report-type expense-text">Expense</span> <span class="report-amount">${money(v.expense)}</span></div><div class="pct-small">${expensePct.toFixed(2)}%</div>`;
+  }
+  d.innerHTML=`<div class="report-name">${esc(name)}</div><div class="report-values">${details}</div>`;
+  box.appendChild(d);
+});
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+$("incomeType").onclick=()=>{type="income";$("incomeType").classList.add("active");$("expenseType").classList.remove("active")};
+$("expenseType").onclick=()=>{type="expense";$("expenseType").classList.add("active");$("incomeType").classList.remove("active")};
+$("saveBtn").onclick=()=>{
+ let p=$("particular").value.trim(),a=Number($("amount").value),n=$("note").value.trim();
+ if(!p||!a||a<0){$("saveMsg").textContent="Enter particular and amount.";return}
+ entries.push({id:Date.now()+"",particular:p,amount:a,type,date:todayStr(),createdAt:Date.now(),note:n||""});save();$("particular").value="";$("amount").value="";$("note").value="";
+ $("saveMsg").textContent="Saved ✓";setTimeout(()=>$("saveMsg").textContent="",1200);render();
+};
+
+function openEdit(id){
+  const e=entries.find(x=>x.id===id);if(!e)return;
+  editId=id;editType=e.type;
+  $("editParticular").value=e.particular||"";
+  $("editNote").value=e.note||"";
+  $("editAmount").value=e.amount;
+  $("editDate").value=e.date||todayStr();
+  $("editIncomeType").classList.toggle("active",editType==="income");
+  $("editExpenseType").classList.toggle("active",editType==="expense");
+  $("editModal").classList.add("open");
+}
+$("editIncomeType").onclick=()=>{editType="income";$("editIncomeType").classList.add("active");$("editExpenseType").classList.remove("active")};
+$("editExpenseType").onclick=()=>{editType="expense";$("editExpenseType").classList.add("active");$("editIncomeType").classList.remove("active")};
+$("cancelEditBtn").onclick=()=>{$("editModal").classList.remove("open");editId=null};
+$("editModal").onclick=e=>{if(e.target===$("editModal")){$("editModal").classList.remove("open");editId=null}};
+$("updateBtn").onclick=()=>{
+  if(!editId)return;
+  let p=$("editParticular").value.trim(),a=Number($("editAmount").value),n=$("editNote").value.trim(),d=$("editDate").value;
+  if(!p||!a||a<0||!d){alert("Particular, amount and date required.");return}
+  const idx=entries.findIndex(x=>x.id===editId);
+  if(idx===-1)return;
+  entries[idx]={...entries[idx],particular:p,amount:a,type:editType,date:d,note:n||""};
+  save();$("editModal").classList.remove("open");editId=null;render();
+};
+document.querySelectorAll(".nav-btn").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(b.dataset.tab).classList.add("active");render()});
+$("filterBtn").onclick=renderReport;
+$("resetFilterBtn").onclick=()=>{$("fromDate").value="";$("toDate").value="";renderReport()};
+$("printReportBtn").onclick=()=>window.print();
+$("clearAll").onclick=()=>{if(entries.length&&confirm("Delete all entries? This cannot be undone.")){entries=[];save();render()}};
+$("exportBtn").onclick=exportExcel;
+function exportExcel(){
+ if(!entries.length){alert("No data to export.");return}
+ let rows=[["Date","Type","Particular","Note","Amount"]];
+ entries.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>rows.push([e.date,e.type,e.particular,e.note||"",e.amount]));
+ let csv=rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(",")).join("\\n");
+ let blob=new Blob(["\\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+ let url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="income-expense-"+todayStr()+".csv";a.click();URL.revokeObjectURL(url);
+ alert("Exported as CSV. It opens directly in Excel.");
+}
+/* Permanent local backup:
+   Browser storage can be deleted by clearing site data, so this feature
+   keeps a copy in a user-selected file outside browser storage.
+*/
+let backupFileHandle = null;
+
+async function backupToFile(showMessage=true){
+  if(!window.showSaveFilePicker){
+    // Fallback: download a JSON backup file.
+    const blob = new Blob([JSON.stringify(entries, null, 2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "income-expense-backup.json";
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    if(showMessage) alert("Backup file downloaded. Keep this file safe.");
+    return;
+  }
+
+  try{
+    if(!backupFileHandle){
+      backupFileHandle = await window.showSaveFilePicker({
+        suggestedName:"income-expense-backup.json",
+        types:[{
+          description:"Income & Expense Backup",
+          accept:{"application/json":[".json"]}
+        }]
+      });
+    }
+    const writable = await backupFileHandle.createWritable();
+    await writable.write(JSON.stringify({
+      app:"Income & Expense Tracker",
+      version:1,
+      savedAt:new Date().toISOString(),
+      entries:entries
+    }, null, 2));
+    await writable.close();
+    if(showMessage) alert("Permanent backup saved successfully.");
+  }catch(err){
+    if(err && err.name !== "AbortError") alert("Backup could not be saved.");
+  }
+}
+
+async function restoreFromFile(){
+  if(!window.showOpenFilePicker){
+    alert("This browser does not support direct restore. Use a browser that supports file access, such as Chrome or Edge.");
+    return;
+  }
+  try{
+    const [handle] = await window.showOpenFilePicker({
+      multiple:false,
+      types:[{
+        description:"Income & Expense Backup",
+        accept:{"application/json":[".json"]}
+      }]
+    });
+    const file = await handle.getFile();
+    const data = JSON.parse(await file.text());
+    if(!Array.isArray(data.entries)) throw new Error("Invalid backup");
+    if(confirm("Restore this backup? Current browser data will be replaced.")){
+      entries = data.entries;
+      save();
+      backupFileHandle = handle;
+      render();
+      alert("Backup restored successfully.");
+    }
+  }catch(err){
+    if(err && err.name !== "AbortError") alert("Invalid or unreadable backup file.");
+  }
+}
+
+$("backupBtn").onclick = async ()=>{
+  if(!backupFileHandle){
+    await backupToFile(true);
+    if(backupFileHandle){
+      $("backupStatus").textContent="Auto backup ON ✓";
+      setTimeout(()=>$("backupStatus").textContent="",2500);
+    }
+  }else{
+    await backupToFile(true);
+  }
+};
+
+/* Add a restore button to the dashboard. */
+const clearBtn = $("clearAll");
+if(clearBtn){
+  const restoreBtn = document.createElement("button");
+  restoreBtn.className = "text-danger";
+  restoreBtn.textContent = "Restore Backup";
+  restoreBtn.style.marginRight = "10px";
+  restoreBtn.onclick = restoreFromFile;
+  clearBtn.parentNode.insertBefore(restoreBtn, clearBtn);
+}
+
+/* Keep the external backup file updated after every save/delete/clear. */
+const originalSave = save;
+save = function(){
+  originalSave();
+  if(backupFileHandle){ backupToFile(false); $("backupStatus").textContent="Auto backup updated ✓"; setTimeout(()=>$("backupStatus").textContent="",1200); }
+};
+
+
+
+/* Calculator stays hidden until requested. */
+$("calculatorToggle").onclick=()=>{
+  const box=document.querySelector(".calculator-card");
+  box.classList.toggle("open");
+  $("calculatorToggle").textContent=box.classList.contains("open")?"✕ Hide Calculator":"🧮 Calculator";
+};
+
+/* Simple calculator -> Amount field */
+let calcExpression = "";
+const calcDisplay = $("calcDisplay");
+
+function updateCalc(){
+  calcDisplay.value = calcExpression;
+}
+
+document.querySelectorAll("[data-calc]").forEach(btn=>{
+  btn.onclick=()=>{
+    const v=btn.dataset.calc;
+    if(["+","-","*","/"].includes(v)){
+      if(!calcExpression) return;
+      if(/[+\-*/.]$/.test(calcExpression)) calcExpression=calcExpression.slice(0,-1);
+    }
+    calcExpression += v;
+    updateCalc();
+  };
+});
+
+$("calcClear").onclick=()=>{
+  calcExpression="";
+  updateCalc();
+};
+
+$("calcEquals").onclick=()=>{
+  try{
+    if(!calcExpression) return;
+    if(!/^[0-9+\-*/. ()]+$/.test(calcExpression)) throw new Error();
+    const result=Function('"use strict";return ('+calcExpression+')')();
+    if(!Number.isFinite(result)) throw new Error();
+    calcExpression=String(Math.round((result+Number.EPSILON)*100000000)/100000000);
+    updateCalc();
+  }catch(e){
+    calcDisplay.value="Error";
+    calcExpression="";
+    setTimeout(updateCalc,900);
+  }
+};
+
+$("calcToAmount").onclick=()=>{
+  $("calcEquals").click();
+  const value=Number(calcDisplay.value);
+  if(Number.isFinite(value) && value>=0){
+    $("amount").value=value;
+    $("amount").focus();
+    $("saveMsg").textContent="Calculator amount added ✓";
+    setTimeout(()=>$("saveMsg").textContent="",1500);
+  }
+};
+
+render();
+</script>
+</body>
+</html>
