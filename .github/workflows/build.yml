@@ -1,1 +1,66 @@
+name: Phone Build APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Create Android Project & Build APK
+        run: |
+          npx --yes react-native@0.72.6 init OfflineApp --skip-install
+          cd OfflineApp
+          npm install react-native-webview@13.6.0
+          mkdir -p android/app/src/main/assets
+          cp -R ../. android/app/src/main/assets/
+          
+          cat << 'EOF' > App.js
+          import React from 'react';
+          import { SafeAreaView } from 'react-native';
+          import { WebView } from 'react-native-webview';
+
+          export default function App() {
+            return (
+              <SafeAreaView style={{flex: 1}}>
+                <WebView
+                  source={{ uri: 'file:///android_asset/index.html' }}
+                  allowFileAccess={true}
+                  allowUniversalAccessFromFileURLs={true}
+                  domStorageEnabled={true}
+                  javaScriptEnabled={true}
+                  originWhitelist={['*']}
+                />
+              </SafeAreaView>
+            );
+          }
+          EOF
+          
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyExpenses-Offline-APK
+          path: OfflineApp/android/app/build/outputs/apk/debug/app-debug.apk
 
