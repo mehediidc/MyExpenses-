@@ -2,7 +2,9 @@ name: Fast Offline APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -21,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
       - name: Build Cordova APK
         run: |
@@ -30,7 +32,6 @@ jobs:
           cd myApp
           rm -rf www/*
           cp -R ../. www/
-          # Ensure workflow file is not copied inside www
           rm -rf www/.github
           cordova platform add android
           cordova build android --debug
@@ -40,33 +41,3 @@ jobs:
         with:
           name: MyExpenses-Offline-APK
           path: myApp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
-          import React from 'react';
-          import { SafeAreaView } from 'react-native';
-          import { WebView } from 'react-native-webview';
-
-          export default function App() {
-            return (
-              <SafeAreaView style={{flex: 1}}>
-                <WebView
-                  source={{ uri: 'file:///android_asset/index.html' }}
-                  allowFileAccess={true}
-                  allowUniversalAccessFromFileURLs={true}
-                  domStorageEnabled={true}
-                  javaScriptEnabled={true}
-                  originWhitelist={['*']}
-                />
-              </SafeAreaView>
-            );
-          }
-          EOF
-          
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: MyExpenses-Offline-APK
-          path: OfflineApp/android/app/build/outputs/apk/debug/app-debug.apk
-
