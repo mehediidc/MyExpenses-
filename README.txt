@@ -1,1 +1,0 @@
-Upload this ZIP to PWABuilder or host on HTTPS. PWABuilder should detect manifest.json and sw.js. The app is offline-capable and includes CSV export.
