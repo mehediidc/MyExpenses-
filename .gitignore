@@ -1,0 +1,5 @@
+node_modules/
+platforms/
+plugins/android.json
+plugins/fetch.json
+.DS_Store
