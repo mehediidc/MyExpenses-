@@ -1,22 +1,16 @@
-# MyExpenses v5 — GitHub APK Builder
+# MyExpenses — GitHub-ready Android project
 
-This project builds the MyExpenses Android APK automatically with GitHub Actions.
+This project keeps the offline SQLite app and adds a small native Android Cordova plugin for:
 
-## Build the APK
+- **Native Android printing** for Summary and Ledger (opens the real Android Print Service).
+- **Easy backup** directly to `Downloads/MyExpenses/` as a JSON file.
+- Restore still uses the app's file picker.
+- No server, login, or internet dependency for app data.
 
-1. Create a new GitHub repository, for example `MyExpenses-v5`.
-2. Upload **all files and folders in this project** to the repository root.
-3. Make sure `.github/workflows/build-apk.yml` is uploaded too.
-4. Commit/push to the `main` branch.
-5. Open the repository → **Actions** → **Build MyExpenses APK**.
-6. Open the completed workflow run.
-7. Under **Artifacts**, download **MyExpenses-v5-APK**.
-8. Extract the ZIP and install the APK on Android.
+## GitHub Actions
 
-You can also build manually from Actions → Build MyExpenses APK → Run workflow.
+Upload the whole project to a GitHub repository. The included workflow builds a release APK automatically.
 
-## Important
+Workflow: `.github/workflows/build-apk.yml`
 
-The generated APK is a **debug APK**. It is suitable for direct installation/testing. It is not signed with your personal release key, so it should not be expected to update an already-installed APK signed with a different key.
-
-The Cordova File plugin is explicitly installed during the GitHub build so the MyExpenses backup function can write a backup file to Android external storage/Downloads where supported by the Android version.
+The APK is uploaded as a workflow artifact.

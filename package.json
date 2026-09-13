@@ -1,0 +1,9 @@
+{
+  "name": "myexpenses-android",
+  "version": "4.1.0",
+  "description": "MyExpenses offline Android app",
+  "main": "index.js",
+  "scripts": {"build": "cordova build android --release"},
+  "devDependencies": {"cordova": "^12.0.0", "cordova-android": "^13.0.0"},
+  "cordova": {"platforms": ["android"], "plugins": {"myexpenses-native": {"LOCAL": "plugins/myexpenses-native"}}}
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="myexpenses-native" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+  <name>MyExpenses Native Android Support</name>
+  <description>Native Android printing and backup support for MyExpenses.</description>
+  <license>MIT</license>
+  <js-module src="www/myexpenses-native.js" name="MyExpensesNative">
+    <clobbers target="window.MyExpensesNative" />
+  </js-module>
+  <platform name="android">
+    <config-file parent="/*" target="app/src/main/AndroidManifest.xml">
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    </config-file>
+    <source-file src="src/android/MyExpensesNative.java" target-dir="src/com/mhdigital/myexpenses/nativeplugin" />
+  </platform>
+</plugin>
