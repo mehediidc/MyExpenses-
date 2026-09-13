@@ -1,0 +1,40 @@
+name: Build MyExpenses APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Cordova Android
+        run: |
+          npm install -g cordova
+          cordova platform add android@13.0.0
+
+      - name: Build APK
+        run: |
+          cordova build android --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyExpenses-debug-apk
+          path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
