@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java Development Kit (JDK 17)
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -31,19 +31,14 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Cordova globally
+      - name: Install Cordova CLI
         run: npm install -g cordova
 
       - name: Install Project Dependencies
         run: npm install
 
-      - name: Prepare Cordova Android Platform
-        run: |
-          cordova platform add android || true
-          cordova prepare android
-
-      - name: Make Gradle executable
-        run: chmod +x platforms/android/gradlew
+      - name: Add Android Platform
+        run: cordova platform add android@latest
 
       - name: Build Debug APK
         run: cordova build android --debug
